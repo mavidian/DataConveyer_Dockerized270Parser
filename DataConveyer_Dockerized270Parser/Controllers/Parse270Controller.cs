@@ -29,10 +29,6 @@ namespace DataConveyer_Dockerized270Parser.Controllers
       [ProducesResponseType(StatusCodes.Status400BadRequest)]
       public async Task<ActionResult<string>> Post()
       {
-         //DataConveyer v3.2.0 has some synchronous IO (e.g. X12), which needs to be enabled.
-         var syncIOFeature = HttpContext.Features.Get<IHttpBodyControlFeature>();
-         if (syncIOFeature != null) syncIOFeature.AllowSynchronousIO = true;
-
          using var reader = new StreamReader(Request.Body, Encoding.UTF8);
          (ProcessResult result, string output) = await ProcessX12Async(reader);
          if (result.CompletionStatus != CompletionStatus.IntakeDepleted) return BadRequest();
@@ -43,8 +39,7 @@ namespace DataConveyer_Dockerized270Parser.Controllers
       {
          var retVal = new StringBuilder();
 
-         var logger = LoggerCreator.CreateLogger(LoggerType.LogFile, "EDI 270 tests", LogEntrySeverity.Information, "C:\\Temp\\log.txt");
-         var config = new OrchestratorConfig(logger)
+         var config = new OrchestratorConfig()
          {
             InputDataKind = KindOfTextData.X12,
             AsyncIntake = true,

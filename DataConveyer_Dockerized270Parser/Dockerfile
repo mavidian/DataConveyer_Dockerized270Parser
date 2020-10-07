@@ -1,8 +1,8 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.0-buster-slim AS base
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
 WORKDIR /app
 EXPOSE 80
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.0-buster AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["DataConveyer_Dockerized270Parser/DataConveyer_Dockerized270Parser.csproj", "DataConveyer_Dockerized270Parser/"]
 RUN dotnet restore "DataConveyer_Dockerized270Parser/DataConveyer_Dockerized270Parser.csproj"
